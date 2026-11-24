@@ -1,0 +1,64 @@
+
+(* =========================================
+   WATER TANK LEVEL SIMULATION
+   Simulation update interval: 100 ms
+   ========================================= *)
+
+(* Reset simulated water level *)
+IF xSimReset THEN
+    rSimWaterLevel := 0.0;
+END_IF;
+
+
+(* Run simulation timer *)
+tmrSimTick(
+    IN := xSimEnable AND NOT tmrSimTick.Q,
+    PT := T#100MS
+);
+
+
+(* Update water level every 100 ms *)
+IF xSimEnable AND tmrSimTick.Q THEN
+
+    (* Pump ON: increase water level *)
+    IF xPumpOutput THEN
+        rSimWaterLevel :=
+            rSimWaterLevel + (rSimFillRate * 0.1);
+
+    (* Pump OFF: decrease level only if drain rate is configured *)
+    ELSIF rSimDrainRate > 0.0 THEN
+        rSimWaterLevel :=
+            rSimWaterLevel - (rSimDrainRate * 0.1);
+    END_IF;
+
+END_IF;
+
+
+(* Limit water level between 0 and 100 percent *)
+IF rSimWaterLevel > 100.0 THEN
+    rSimWaterLevel := 100.0;
+END_IF;
+
+IF rSimWaterLevel < 0.0 THEN
+    rSimWaterLevel := 0.0;
+END_IF;
+
+
+(* Generate simulated level sensor signals *)
+	xSimLowLevel  := (rSimWaterLevel >= 30.0);
+	xSimHighLevel := (rSimWaterLevel >= 80.0);
+
+(* Feed simulated sensors to the existing PLC logic *)
+IF xSimEnable THEN
+    xLowLevel  := xSimLowLevel;
+    xHighLevel := xSimHighLevel;
+	
+// Calculate HMI water surface offset
+iSimWaterOffset := -REAL_TO_DINT(
+    rSimWaterLevel * 1.31
+);
+
+sSimWaterLevelText :=
+    CONCAT(REAL_TO_STRING(rSimWaterLevel), '%');
+
+END_IF;
