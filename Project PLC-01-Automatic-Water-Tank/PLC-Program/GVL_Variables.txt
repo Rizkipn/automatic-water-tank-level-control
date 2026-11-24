@@ -1,0 +1,74 @@
+
+VAR_GLOBAL
+    // DIGITAL INPUTS
+    xLowLevel          : BOOL;
+    xHighLevel         : BOOL;
+
+    // DIGITAL OUTPUTS
+    xPumpOutput        : BOOL;
+
+    // HMI COMMANDS
+    xHMI_Start         : BOOL;
+    xHMI_Stop          : BOOL;
+    xHMI_AutoMode      : BOOL;
+    xHMI_ManualPump    : BOOL;
+    xHMI_Reset         : BOOL;
+
+    // INTERNAL CONTROL
+    xSystemRun         : BOOL;
+    xAutoFillRequest   : BOOL;
+    xPumpCommand       : BOOL;
+    xModeChange        : BOOL;
+    xPreviousAutoMode  : BOOL;
+	xManualPumpRequest : BOOL;
+
+    // ALARM AND PROTECTION
+    xFault             : BOOL;
+    xFillingTimeout    : BOOL;
+    xSensorFault       : BOOL;
+
+    // TIMER
+    tmrFillingTimeout  : TON;
+	
+	    // HMI WATER LEVEL SIMULATION
+    rSimWaterLevel    : REAL := 0.0;
+	sSimWaterLevelText : STRING(10);
+    rSimFillRate      : REAL := 5.0;
+    rSimDrainRate     : REAL := 0.0;
+
+    // SIMULATION CONTROL
+    xSimEnable        : BOOL := TRUE;
+    xSimReset         : BOOL := FALSE;
+
+    // SIMULATED LEVEL SENSORS
+    xSimLowLevel      : BOOL;
+    xSimHighLevel     : BOOL;
+	
+	// SIMULATION TIMER
+	tmrSimTick : TON;
+	
+	// HMI WATER ANIMATION
+	iSimWaterOffset : DINT := 0;
+	
+	// HMI STATUS DISPLAY
+	sSystemStatusText  : STRING(20);
+	sOperatingModeText : STRING(20);
+	sPumpStatusText    : STRING(20);
+	
+	// HMI DYNAMIC TEXT COLORS
+	dwSystemStatusColor  : DWORD;
+	dwOperatingModeColor : DWORD;
+	dwPumpStatusColor    : DWORD;
+	
+	// HMI ALARM DISPLAY
+	sSensorFaultText   : STRING(20);
+	sFillingTimeoutText : STRING(20);
+	sSystemFaultText   : STRING(20);
+
+	// HMI ALARM COLORS
+	dwSensorFaultColor    : DWORD;
+	dwFillingTimeoutColor : DWORD;
+	dwSystemFaultColor    : DWORD;
+
+
+END_VAR
